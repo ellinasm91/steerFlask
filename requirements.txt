@@ -1,0 +1,9 @@
+wheel==0.29.0
+Flask<1
+pydocumentdb==1.9.0
+requests==2.10.0
+pyjwt==1.4.1
+azure<1
+pymongo==3.3.0
+aylien-apiclient==0.6.0
+requests-oauthlib==0.6.2

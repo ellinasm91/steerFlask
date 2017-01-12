@@ -1,0 +1,1 @@
+[{"id": "57cea7585c92eb1cf9d88cce", "product_ids": ["57cea7545c92eb1cf9d88ccc"], "name": "60% Percent off in Consoles", "retailer_id": "57b3426a5c92eb36b97edc76"}, {"id": "57cea7c31e17a4350c0bc933", "product_ids": ["57cea7bf1e17a4350c0bc931"], "name": "60% Percent off in Consoles", "retailer_id": "57a09e6da46fb23bf69d5984"}]

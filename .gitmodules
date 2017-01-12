@@ -1,0 +1,3 @@
+[submodule "FlaskWebProject/steershared"]
+	path = FlaskWebProject/steershared
+	url = https://github.com/TomMulvaney/steershared.git
