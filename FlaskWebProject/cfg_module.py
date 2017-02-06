@@ -8,8 +8,8 @@ class Cfg(object):
     DEFAULT_MODE = 'debug'
     DOCUMENTDB_HOST = 'https://steerdatabase.documents.azure.com:443/'
     DOCUMENTDB_MASTER_KEY = 'fJxIpPAIXXZzoArleTZhlrumtoF50ug8ztRcXS6J2e2hUu2WLkPZys9IAwDKVtuyE0XwyQ6cXtTvzh83gt2N3A=='
-    MONGO_USER = 'spmarket'
-    MONGO_PASS = '5rMQylG2e0su'
+    MONGO_USER = 'SpotMarketAdmin'
+    MONGO_PASS = 'NwDqsk9kO6dl'
     MONGO_HOST = 'mongodb://13.74.153.149' # DNS Servers got DDOSed so DNS stopped working and we changed to IP,
                                             # We left it like this just in case it happens again
     #MONGO_HOST = 'mongodb://vps301173.ovh.net'
