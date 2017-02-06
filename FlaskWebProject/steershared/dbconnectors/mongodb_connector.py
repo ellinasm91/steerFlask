@@ -1,5 +1,5 @@
 from FlaskWebProject import app
-from FlaskWebProject.steershared.shared_consts import ID, MONGO_DB, DB_ID
+from FlaskWebProject.steershared.shared_consts import ID, MONGO_DB, DB_ID, MONGO_USER, MONGO_PASS
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from copy import deepcopy
@@ -60,7 +60,7 @@ class MongoConnector:
     def gen_client(self):
         """Generates db client"""
         self._client = MongoClient(app.config[MONGO_DB])['{0}_{1}'.format(app.config[DB_ID], self._mode)]
-
+        self._client.authenticate(app.config[MONGO_USER], app.config[MONGO_PASS], source= "admin")
     @deco_retry
     def create(self, collection_id, docs):
         """Creates docs, returns list of str representing ids of created docs"""
