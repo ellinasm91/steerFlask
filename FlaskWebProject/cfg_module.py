@@ -4,7 +4,7 @@ class Cfg(object):
     REST_URI = 'http://steerflaskapp.azurewebsites.net'
     JWT_SECRET = 'toomanysecrets'
     JWT_ALGO = 'HS256'
-    DB_ID = 'steerdb'
+    DB_ID = 'spotmarket'
     DEFAULT_MODE = 'debug'
     DOCUMENTDB_HOST = 'https://steerdatabase.documents.azure.com:443/'
     DOCUMENTDB_MASTER_KEY = 'fJxIpPAIXXZzoArleTZhlrumtoF50ug8ztRcXS6J2e2hUu2WLkPZys9IAwDKVtuyE0XwyQ6cXtTvzh83gt2N3A=='
