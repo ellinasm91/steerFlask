@@ -1,5 +1,5 @@
 class Cfg(object):
-    DEBUG = False
+    DEBUG = True
     TESTING = False
     REST_URI = 'http://steerflaskapp.azurewebsites.net'
     JWT_SECRET = 'toomanysecrets'
@@ -24,11 +24,11 @@ class Cfg(object):
 
 
 class ProductionCfg(Cfg):
-    DEBUG = False
+    DEBUG = True
 
 
 class ProductionCfg(Cfg):
-    DEBUG = False
+    DEBUG = True
 
 
 class ProductionCfg(Cfg):
