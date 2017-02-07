@@ -21,8 +21,7 @@ def get_db(headers):
     :return: Database Connector
     """
     try:
-        #mode = str(headers[MODE_HEADER_KEY])
-        mode="debug"
+        mode = str(headers[MODE_HEADER_KEY])
     except (KeyError, TypeError):
         if type(headers) is unicode:
             headers = str(headers)
