@@ -10,7 +10,7 @@ class Cfg(object):
     DOCUMENTDB_MASTER_KEY = 'fJxIpPAIXXZzoArleTZhlrumtoF50ug8ztRcXS6J2e2hUu2WLkPZys9IAwDKVtuyE0XwyQ6cXtTvzh83gt2N3A=='
     MONGO_USER = 'SpotMarketAdmin'
     MONGO_PASS = 'NwDqsk9kO6dl'
-    MONGO_HOST = 'mongodb://13.74.153.149' # DNS Servers got DDOSed so DNS stopped working and we changed to IP,
+    MONGO_HOST = 'mongodb://13.74.28.28' # DNS Servers got DDOSed so DNS stopped working and we changed to IP,
                                             # We left it like this just in case it happens again
     #MONGO_HOST = 'mongodb://vps301173.ovh.net'
     MONGO_DB = '{0}/{1}'.format(MONGO_HOST, DB_ID)
