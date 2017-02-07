@@ -214,7 +214,7 @@ def consumer_logintemp(in_data, headers):
 
 
 if __name__ == '__main__':
-    dev_headers = {MODE_HEADER_KEY: TEST}
+    dev_headers = {MODE_HEADER_KEY: DEBUG}
     password_ = 'Spot1234'
     dev_retailer = retailer_login({USERNAME: 'JohnDoe', PASSWORD: password_}, dev_headers)
     print 'RETAILER'
