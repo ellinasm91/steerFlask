@@ -124,7 +124,7 @@ def login_with_password(in_data, user_collection, headers):
     if users:
         user = users[0]
         hashed_pass = gen_hashed_pass(password, user[SALT])
-        if password == user[HASHED_PASS]:
+        if hashed_pass == user[HASHED_PASS]:
             del user[HASHED_PASS]
             user[REFRESH_TOKEN], user[ACCESS_TOKEN] = gen_tokens(user, user_collection)
             return user
