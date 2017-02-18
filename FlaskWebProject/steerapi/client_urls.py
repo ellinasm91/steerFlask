@@ -5,6 +5,7 @@ from data_errors import MissingFunctionError
 import io_transformers
 import crud_safety
 import sec
+import pending
 
 
 @app.route('/')
@@ -55,4 +56,34 @@ def user_sec_action(user_type, action):
     print '{0} called sec action {1}'.format(user_type, action)
     func = get_func(sec, user_type, action, None)
     out_data = func(in_data, request.headers)
+    return io_transformers.transform_output(out_data, request.headers)
+
+
+@app.route('/pending/retailers/<action>', methods=['GET'])
+# @sec.check_token
+def testing(action, headers):
+    print 'test1'
+    print str(request.headers)
+    user_type = headers[DECODED_TOKEN][USER_TYPE]
+    in_data = io_transformers.transform_input(request.data, request.headers, False)
+    print '{0} trying to {1}'.format(user_type, action)
+    func = get_func(pending, user_type, action, 'pending_retailers')
+    # TODO: Check if the pending retailer is already there
+    # TODO: Check with mike for delete functionality
+    out_data = func('pending_retailers', request.headers, in_data)
+    return io_transformers.transform_output(out_data, request.headers)
+
+
+@app.route('/pending/retailers/<action>', methods=['POST'])
+def testing1(action):
+    print 'test1'
+    print str(request.headers)
+    in_data = io_transformers.transform_input(request.data, request.headers, False)
+    print '{0} trying to {1}'.format('retailers', action)
+    func = get_func(pending, 'retailer', action, 'pending_retailers')
+    # TODO: Check if the pending retailer is already there
+    # TODO: Check with mike for delete functionality
+    # out_data = pending.create('pending_retailers', request.headers, in_data)
+    # out_data = pending.read('pending_retailers', request.headers, in_data)
+    out_data = func('pending_retailers', request.headers, in_data)
     return io_transformers.transform_output(out_data, request.headers)

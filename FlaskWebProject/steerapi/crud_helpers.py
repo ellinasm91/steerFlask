@@ -191,7 +191,7 @@ def check_collection_permission(collection_id, headers, action):
     elif user_type == TOWN:
         # Town: Create, Update, Delete
         if action in [CREATE, UPDATE, DELETE] and collection_id in [BEACONS, CONSUMERS, RETAILERS, RETAILER_USERS,
-                                                                    TOWN_USERS]:
+                                                                    TOWN_USERS, PENDING_RETAILERS]:
             return
         elif action == READ:
             return
