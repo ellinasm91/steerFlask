@@ -66,11 +66,11 @@ def testing(action, headers):
     print str(request.headers)
     # user_type = headers[DECODED_TOKEN][USER_TYPE]
     in_data = io_transformers.transform_input(request.data, request.headers, False)
-    print '{0} trying to {1}'.format(user_type, action)
-    func = get_func(pending, user_type, action, 'pending_retailers')
+    # print '{0} trying to {1}'.format(user_type, action)
+    # func = get_func(pending, user_type, action, 'pending_retailers')
     # TODO: Check if the pending retailer is already there
     # TODO: Check with mike for delete functionality
-    out_data = pending.town_read_pending_retailers('pending_retailers', headers, query_dicts)
+    out_data = pending.town_read_pending_retailers('pending_retailers', headers, 'a')
     # out_data = func('pending_retailers', request.headers, in_data)
     return io_transformers.transform_output(out_data, request.headers)
 
