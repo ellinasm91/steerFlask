@@ -77,13 +77,13 @@ def testing(action):
     return io_transformers.transform_output(out_data, request.headers)
 
 
-@app.route('/pending/retailers/<action>', methods=['POST'])
-def testing1(action):
+@app.route('/pending/<user_type>/<action>', methods=['POST'])
+def testing1(action,user_type):
     print 'test1'
     print str(request.headers)
     in_data = io_transformers.transform_input(request.data, request.headers, False)
-    print '{0} trying to {1}'.format('retailers', action)
-    func = get_func(pending, 'retailer', action, 'pending_retailers')
+    print '{0} trying to {1}'.format(user_type, action)
+    func = get_func(pending, user_type, action, 'pending_retailers')
     # TODO: Check if the pending retailer is already there
     # TODO: Check with mike for delete functionality
     # out_data = pending.create('pending_retailers', request.headers, in_data)
