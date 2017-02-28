@@ -67,6 +67,10 @@ class MongoConnector:
         # Recommendation Engine may pass a dictionary, so ensure it's wrapped in a list
         if type(docs) is dict:
             docs = [docs]
+        # If the input collection specifies an id pass this into Mongo to stop it from creating its own id
+        for doc in docs:
+            if ID in doc:
+                doc[_mongo_id_key] = doc[ID]
         try:
             results = self._client[collection_id].insert_many(docs)
             ids = [str(inserted_id) for inserted_id in results.inserted_ids]
@@ -87,7 +91,6 @@ class MongoConnector:
         # Recommendation Engine may pass a dictionary, so ensure it's wrapped in a list
         if type(query_dicts) is dict:
             query_dicts = [query_dicts]
-
         try:
             # If there are no query dicts then find all docs in the collection
             if not query_dicts:
@@ -98,11 +101,13 @@ class MongoConnector:
             else:
                 docs = []
                 for query_dict in query_dicts:
+                
                     if ID in query_dict.keys():
                         query_dict[_mongo_id_key] = ObjectId(query_dict[ID])
                         del query_dict[ID]
                     cursor = self._client[collection_id].find(query_dict)
                     docs.extend(_extract_docs(cursor))
+                    print docs
                 return docs
         except Exception as e:
             print type(e)

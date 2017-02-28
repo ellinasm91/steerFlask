@@ -34,8 +34,10 @@ def create_consumer_beacon_interactions(collection_id, headers, interactions):
 
 
 def create_retailer_users(collection_id, headers, docs):
+
     for doc in docs:
         salt = sec.gen_salt()
+        print type(doc[PASSWORD])
         hashed_pass = sec.gen_hashed_pass(doc[PASSWORD], salt)
         doc[SALT] = salt
         doc[HASHED_PASS] = hashed_pass
@@ -100,7 +102,6 @@ def create_products(collection_id, headers, products):
 def read(collection_id, headers, query_dicts):
     if type(query_dicts) is dict:
         query_dicts = [query_dicts]
-
     check_collection_permission(collection_id, headers, READ)
     # Enforce read safety means that there is no need to check doc permission
     query_dicts = enforce_read_safety(collection_id, headers, query_dicts)
@@ -112,11 +113,17 @@ def read(collection_id, headers, query_dicts):
 def read_recommendations(collection_id, headers, geo_coordinates):
     query_dicts = [{IS_PREDICTION: True}]
     docs = read(RATINGS, headers, query_dicts)
-
+    query_Dict_List= {}
     if docs:
         docs = sorted(docs, key=itemgetter(SENTIMENT), reverse=True)
         for doc in docs:
             print '{0}: {1}'.format(doc[NAME], doc[SENTIMENT])
+            query_Dict_List[ID] = doc[RETAILER_ID]
+            retailersDocument = get_db(headers).read(RETAILERS, query_Dict_List)
+            for retailerDocument in retailersDocument:
+                doc[LONG] = retailerDocument[LONG]
+                doc[RETAILER_TYPE] = retailerDocument[RETAILER_TYPE]
+                doc[LAT] = retailerDocument[LAT]
     else:
         db = get_db(headers)
         docs = db.read(PRODUCTS)
@@ -128,9 +135,15 @@ def read_recommendations(collection_id, headers, geo_coordinates):
             doc[CONSUMER_ID] = consumer_id
             doc[ITEM_TYPE] = PRODUCTS
             doc[IS_PREDICTION] = True
-
+            # To Do Retailer Type 
+            query_Dict_List[ID] = doc[RETAILER_ID]
+            retailersDocument = get_db(headers).read(RETAILERS, query_Dict_List)
+            for retailerDocument in retailersDocument:
+                doc[LONG] = retailerDocument[LONG]
+                doc[RETAILER_TYPE] = retailerDocument[RETAILER_TYPE]
+                doc[LAT] = retailerDocument[LAT]
     # TODO: Filter based on consumer location
-    print docs
+    #print docs
     return docs
 
 
@@ -143,7 +156,6 @@ def consumer_read_retailers(collection_id, headers, geo_coordinates):
 def update(collection_id, headers, docs):
     if type(docs) is dict:
         docs = [docs]
-
     check_collection_permission(collection_id, headers, UPDATE)
 
     update_ids = [doc[ID] for doc in docs]

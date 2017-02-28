@@ -1,18 +1,34 @@
 class Cfg(object):
     DEBUG = True
     TESTING = False
+    #REST_URI = 'http://localhost:5555'for testing!
     REST_URI = 'http://steerflaskapp.azurewebsites.net'
     JWT_SECRET = 'toomanysecrets'
     JWT_ALGO = 'HS256'
     DB_ID = 'spotmarket'
     DEFAULT_MODE = 'debug'
+   
+    #DOCUMENTDB_HOST = 'https://steerdatabase.documents.azure.com:443/'
+    #DOCUMENTDB_MASTER_KEY = 'fJxIpPAIXXZzoArleTZhlrumtoF50ug8ztRcXS6J2e2hUu2WLkPZys9IAwDKVtuyE0XwyQ6cXtTvzh83gt2N3A=='
+    MONGO_USER = 'admin'
+    #MONGO_USER = 'SpotMarketAdmin'
+    MONGO_PASS = 'kingkong'
+    #MONGO_PASS = 'NwDqsk9kO6dl'
+    MONGO_HOST = 'mongodb://127.0.0.1/'
+    #MONGO_HOST = 'mongodb://13.74.28.28' # DNS Servers got DDOSed so DNS stopped working and we changed to IP,
+                                            # We left it like this just in case it happens again
+    """
     DOCUMENTDB_HOST = 'https://steerdatabase.documents.azure.com:443/'
     DOCUMENTDB_MASTER_KEY = 'fJxIpPAIXXZzoArleTZhlrumtoF50ug8ztRcXS6J2e2hUu2WLkPZys9IAwDKVtuyE0XwyQ6cXtTvzh83gt2N3A=='
-    MONGO_USER = 'SpotMarketAdmin'
-    MONGO_PASS = 'NwDqsk9kO6dl'
-    MONGO_HOST = 'mongodb://13.74.28.28' # DNS Servers got DDOSed so DNS stopped working and we changed to IP,
+    #MONGO_USER = 'SpotMarketAdmin'
+    #MONGO_PASS = 'NwDqsk9kO6dl'
+    #MONGO_HOST = 'mongodb://13.74.28.28' # DNS Servers got DDOSed so DNS stopped working and we changed to IP,
                                             # We left it like this just in case it happens again
+    MONGO_USER = 'myUserAdmin'
+    MONGO_PASS = 'abc123'
+    MONGO_HOST = 'mongodb://localhost' # DNS Servers got DDOSed so DNS stopped working and we changed to IP,
     #MONGO_HOST = 'mongodb://vps301173.ovh.net'
+    """
     MONGO_DB = '{0}/{1}'.format(MONGO_HOST, DB_ID)
     DB_PACKAGE_PATH = 'FlaskWebProject.steershared.dbconnectors'
     DB_ACCESS_MODULE = 'mongodb_connector'
@@ -28,8 +44,8 @@ class ProductionCfg(Cfg):
 
 
 class ProductionCfg(Cfg):
-    DEBUG = True
+    DEBUG = False
 
 
 class ProductionCfg(Cfg):
-    TESTING = True
+    TESTING = False
