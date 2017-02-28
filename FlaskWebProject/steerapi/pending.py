@@ -40,7 +40,7 @@ def town_read_pending_retailers(collection_id, headers, query_dicts):
     # check_collection_permission(collection_id, headers, READ)
     # Enforce read safety means that there is no need to check doc permission
     # query_dicts = enforce_read_safety(collection_id, headers, query_dicts)
-    docs = get_db(headers).read(PENDING_RETAILERS)
+    docs = get_db(headers).read('pending_retailers')
     return docs
 
 
@@ -88,7 +88,7 @@ def town_approve_pending_retailers(collection_id, headers, in_data):
     print pending_ret_id
     # Retrieve doc from pending retailers
     try:
-        pending_ret_doc = get_db(headers).read(PENDING_RETAILERS, {ID: pending_ret_id})[0]
+        pending_ret_doc = get_db(headers).read('pending_retailers', {ID: pending_ret_id})[0]
     except IndexError:
         raise MissingDocsError(CONSUMERS, [pending_ret_doc])
 
@@ -103,7 +103,7 @@ def town_approve_pending_retailers(collection_id, headers, in_data):
     ret_user_doc[0]['is_admin'] = True
     # ids2 = get_db(headers).create(RETAILER_USERS, ret_user_doc)
     # on normal system use crud_safety.py
-    create_retailer_users(RETAILER_USERS, headers, ret_user_doc)
+    create_retailer_users('pending_retailers', headers, ret_user_doc)
     delete_after_approval(headers, pending_ret_id)
 
     return pending_ret_doc
@@ -124,4 +124,4 @@ def create_retailer_users(collection_id, headers, docs):
 def delete_after_approval(headers,delete_ids):
     print 'Deleting pending retailer'
     # return crud_safety.delete(PENDING_RETAILERS, headers, delete_ids)
-    return get_db(headers).delete(PENDING_RETAILERS, str(delete_ids))
+    return get_db(headers).delete('pending_retailers', str(delete_ids))
