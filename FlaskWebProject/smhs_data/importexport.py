@@ -3,7 +3,7 @@ from FlaskWebProject.steershared.dbconnectors.db_helpers import get_db
 import os
 import json
 from bson import json_util
-
+from bson.objectid import ObjectId
 
 def get_dir_name(db_access_module, mode):
     return '{0}_{1}'.format(db_access_module, mode)
@@ -19,10 +19,18 @@ def import_db(db_access_module, mode, path=os.getcwd()):
         file_path = os.path.join(dir_path, '{0}.txt'.format(coll))
         with open(file_path.format(coll), 'r') as f:
             docs = json.load(f)
+
+# Why delete the input ID?
             for doc in docs:
+                doc[ID] = ObjectId(doc[ID])
+                doc[objectID] = doc[ID]
                 del doc[ID]
         db.delete(coll)
-        db.create(coll, docs)
+        if(docs):
+            print 'Importing {0}.txt'.format(coll)
+            db.create(coll, docs)
+        else:
+            print 'Empty file {0}.txt'.format(coll)
 
 
 def export_db(db_access_module, mode, path=os.getcwd()):
@@ -42,4 +50,4 @@ def export_db(db_access_module, mode, path=os.getcwd()):
 
 
 if __name__ == '__main__':
-    export_db('mongodb_connector', EVAL)
+    import_db('mongodb_connector', EVAL)

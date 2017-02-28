@@ -125,7 +125,7 @@ def login_with_password(in_data, user_collection, headers):
         user = users[0]
         hashed_pass = gen_hashed_pass(password, user[SALT])
         if hashed_pass == user[HASHED_PASS]:
-            del user[HASHED_PASS]
+            del user[HASHED_PASS], user[SALT]
             user[REFRESH_TOKEN], user[ACCESS_TOKEN] = gen_tokens(user, user_collection)
             return user
         else:
@@ -140,6 +140,8 @@ def retailer_login(in_data, headers):
         # Find the retailer name
         retailer = get_db(headers).read(RETAILERS, {ID: user[RETAILER_ID]})[0]
         user[RETAILER_NAME] = retailer[NAME]
+        user[RETAILER_TYPE] = retailer[RETAILER_TYPE]
+        user[ADDRESS] = retailer[ADDRESS]
     # Zen: Errors should never pass silently, unless explicitly silenced. It's not the end of the world if we can't
     # find the retailer name
     except IndexError:
