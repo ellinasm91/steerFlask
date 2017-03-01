@@ -3,7 +3,7 @@ class Cfg(object):
     TESTING = False
     #REST_URI = 'http://localhost:5555'
     #
-    REST_URI = 'http://steerflaskapp.azurewebsites.net'
+    REST_URI = 'http://spotmarketflask.azurewebsites.net'
     JWT_SECRET = 'toomanysecrets'
     JWT_ALGO = 'HS256'
     DB_ID = 'spotmarket'
