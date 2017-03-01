@@ -1,7 +1,8 @@
 class Cfg(object):
     DEBUG = True
     TESTING = False
-    # REST_URI = 'http://localhost:5555'for testing!
+    #REST_URI = 'http://localhost:5555'
+    #
     REST_URI = 'http://steerflaskapp.azurewebsites.net'
     JWT_SECRET = 'toomanysecrets'
     JWT_ALGO = 'HS256'

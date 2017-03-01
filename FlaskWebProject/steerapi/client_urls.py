@@ -59,7 +59,7 @@ def user_sec_action(user_type, action):
     return io_transformers.transform_output(out_data, request.headers)
 
 
-@app.route('/pending/retailers/<action>', methods=['POST'])
+@app.route('/pending/retailers/read', methods=['POST'])
 # @sec.check_token
 # def testing(action, headers):
 def testing(action):
