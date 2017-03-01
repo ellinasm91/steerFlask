@@ -67,7 +67,7 @@ def testing():
     print str(request.headers)
     # user_type = headers[DECODED_TOKEN][USER_TYPE]
     # in_data = io_transformers.transform_input(request.data, request.headers, False)
-    print '{0} trying to {1}'.format('reda', action)
+    print '{0} trying to {1}'.format('reda', 'read')
     # func = get_func(pending, user_type, action, 'pending_retailers')
     # TODO: Check if the pending retailer is already there
     # TODO: Check with mike for delete functionality
