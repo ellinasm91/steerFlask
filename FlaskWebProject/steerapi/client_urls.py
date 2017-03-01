@@ -62,7 +62,7 @@ def user_sec_action(user_type, action):
 @app.route('/pending/retailers/read', methods=['POST'])
 # @sec.check_token
 # def testing(action, headers):
-def testing(action):
+def testing():
     print 'test1'
     print str(request.headers)
     # user_type = headers[DECODED_TOKEN][USER_TYPE]
