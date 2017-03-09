@@ -65,11 +65,11 @@ RETAILER_RATINGS = 'retailer_ratings'
 RATINGS = 'ratings'
 RECOMMENDATIONS = 'recommendations'
 RETAILERS = 'retailers'
-PENDING_RETAILERS = 'pending_retailers'
 RETAILER_INTERACTIONS = 'consumer_retailer_interactions'
 RETAILER_USERS = 'retailer_users'
 THIRD_PARTY_INTERACTIONS = 'consumer_third_party_interactions'
 TOWN_USERS = 'town_users'
+PENDING_RETAILERS = 'pending_retailers'
 
 COLLECTIONS = [BEACONS, BLACKLIST_TOKENS, CALENDAR_EVENTS, BEACON_INTERACTIONS, OFFER_INTERACTIONS,
                PRODUCT_INTERACTIONS, RETAILER_INTERACTIONS, THIRD_PARTY_INTERACTIONS, CONSUMERS, IAB_CATEGORIES,
@@ -184,7 +184,10 @@ LEGAL_ATTRS = {BEACONS: [BEACON_TYPE, ID, IS_ACTIVE, MAJOR, MINOR, RETAILER_ID],
                                 USERNAME],
                RETAILERS: [ADDRESS, IAB_CATEGORY_ID, ID, DESCRIPTION, EMAIL, IMAGE_FILENAMES, LAT, LOGO_IMAGE_FILENAME,
                            LOGO_IMAGE_URL, LONG, NAME, PHONE, POSTCODE, RETAILER_TYPE, SURVEY_IMAGE_URL, WEBSITE],
-               TOWN_USERS: [EMAIL, FIRSTNAME, HASHED_PASS, ID, PHONE, SALT, SURNAME, USERNAME]}
+               TOWN_USERS: [EMAIL, FIRSTNAME, HASHED_PASS, ID, PHONE, SALT, SURNAME, USERNAME],
+               PENDING_RETAILERS: [WEBSITE, SURVEY_IMAGE_URL, DESCRIPTION, LONG, LAT, POSTCODE, RETAILER_TYPE, ADDRESS,
+                                   LOGO_IMAGE_URL, NAME, EMAIL, FIRSTNAME, PASSWORD, PHONE, SURNAME, USERNAME]
+               }
 
 MANDATORY_ATTRS = {BEACONS: [BEACON_TYPE, IS_ACTIVE, MAJOR, MINOR, RETAILER_ID],
                    BLACKLIST_TOKENS: [],
@@ -203,12 +206,16 @@ MANDATORY_ATTRS = {BEACONS: [BEACON_TYPE, IS_ACTIVE, MAJOR, MINOR, RETAILER_ID],
                              SENTIMENT],
                    RETAILER_USERS: [IS_ADMIN, RETAILER_ID, USERNAME],
                    RETAILERS: [LAT, LONG, NAME],
-                   TOWN_USERS: [USERNAME]}
+                   TOWN_USERS: [USERNAME],
+                   PENDING_RETAILERS: [USERNAME, LAT, LONG, NAME]
+                   }
 
 UNIQUE_ATTRS = {CONSUMERS: [USERNAME],
                 RETAILER_USERS: [EMAIL, USERNAME],
                 RETAILERS: [NAME],
-                TOWN_USERS: [EMAIL, USERNAME]}
+                TOWN_USERS: [EMAIL, USERNAME],
+                PENDING_RETAILERS: [EMAIL, USERNAME, NAME]
+                }
 
 # Actions
 CREATE = 'create'
@@ -218,6 +225,7 @@ DELETE = 'delete_products'
 AUTH = 'auth'
 VALIDATE = 'validate'
 REGISTER = 'register'
+APPROVE = 'approve'
 
 # Text Classifier
 TEXT_API_APP_ID = 'TEXT_API_APP_ID'
@@ -247,11 +255,14 @@ RELEASE = 'release'
 TEST = 'test'
 DEFAULT_MODE = 'DEFAULT_MODE'
 
+
 # AzureBlobConnector and AzureTableConnector
 AZURE_ACCOUNT_NAME = 'AZURE_ACCOUNT_NAME'
 AZURE_ACCOUNT_KEY = 'AZURE_ACCOUNT_KEY'
+AZURE_ACCESS_MODULE= 'AZURE_ACCESS_MODULE'
 CONTAINER = 'container'
-
+IMAGES = 'images'
+BLOBNAME = 'blobname'
 # Default column name when converting pd.Series to pd.DataFrame
 SERIES_COLUMN = 'VALUES'
 

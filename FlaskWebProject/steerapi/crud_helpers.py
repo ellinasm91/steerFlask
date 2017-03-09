@@ -1,13 +1,30 @@
 from FlaskWebProject.steershared.dbconnectors.db_helpers import get_db
 from FlaskWebProject.steershared.shared_consts import *
 from FlaskWebProject.steershared.textclassifier import text_classifier
+from FlaskWebProject.steershared.dbconnectors.azureconnectors import AzureBlobConnector
 from data_errors import *
 from sec_errors import NoDocumentPermissionError, NoCollectionPermissionError, UnknownUserTypeError
 import math
+import importlib
+import uuid
 #import numpy as np
 from random import randint
+import base64
 
-
+def uploadBlobImages(dict): # getting the images stored into azure using btyes
+     blobconnector = AzureBlobConnector({AZURE_ACCOUNT_NAME: app.config[AZURE_ACCOUNT_NAME],
+                                        AZURE_ACCOUNT_KEY: app.config[AZURE_ACCOUNT_KEY], CONTAINER: IMAGES},
+                                       None)
+      
+     imageBytes = bytes(base64.b64decode(dict[0][IMAGE_URL]))
+     dict[0][IMAGE_URL] = imageBytes
+     images = {}
+     images[IMAGE_URL] = imageBytes
+     images[CONTAINER] = IMAGES
+     unqiueBlob = uuid.uuid4().urn #convert it into string for an unqiue ID
+     unqiueBlob = unqiueBlob[9:]
+     images[BLOBNAME] = unqiueBlob
+     return blobconnector.upload_blob(images) # Lets store it now buddy
 def classify_products_kmeans(headers, products):
     return
     db = get_db(headers)
@@ -120,7 +137,7 @@ def has_principal_ref(collection_id, headers):
         return collection_id in [BEACONS, RETAILER_USERS, PRODUCTS, OFFERS, RATINGS, RECOMMENDATIONS,
                                  BEACON_INTERACTIONS, PRODUCT_INTERACTIONS, OFFER_INTERACTIONS, RETAILER_INTERACTIONS]
     elif user_type == TOWN:
-        return False
+        return collection_id == PENDING_RETAILERS
     elif user_type == DEV:
         return False
     else:
@@ -178,24 +195,34 @@ def check_collection_permission(collection_id, headers, action):
             return
     # Retailers
     elif user_type == RETAILER:
-        # Retailers: Create, Update, Delete
-        if action in [CREATE, UPDATE, DELETE] and collection_id in [BEACONS, PRODUCTS, OFFERS, RETAILER_USERS,
-                                                                    PRODUCT_INTERACTIONS, OFFER_INTERACTIONS]:
-            return
-        # Retailers: Read
-        elif action == READ and collection_id in [BEACONS, CATEGORIES, PRODUCTS, OFFERS, RETAILER_USERS,
-                                                  PRODUCT_INTERACTIONS, OFFER_INTERACTIONS, RETAILER_INTERACTIONS,
-                                                  BEACON_INTERACTIONS]:
-            return
+        is_admin_temp = headers[DECODED_TOKEN][IS_ADMIN]
+        if is_admin_temp == 1:
+            # Retailers: Create, Update, Delete
+            if action in [CREATE, UPDATE, DELETE] and collection_id in [BEACONS, PRODUCTS, OFFERS, RETAILER_USERS,
+                                                                        PRODUCT_INTERACTIONS, OFFER_INTERACTIONS]:
+                return
+            # Retailers: Read
+            elif action == READ and collection_id in [BEACONS, CATEGORIES, PRODUCTS, OFFERS, RETAILER_USERS,
+                                                      PRODUCT_INTERACTIONS, OFFER_INTERACTIONS, RETAILER_INTERACTIONS,
+                                                      BEACON_INTERACTIONS]:
+                return
+        # Retailers assistant CREATE interactions
+        elif is_admin_temp == 0:
+            if action == CREATE and collection_id in [PRODUCT_INTERACTIONS, OFFER_INTERACTIONS, RETAILER_INTERACTIONS,
+                                                      BEACON_INTERACTIONS]:
+                return
     # Town Users
     elif user_type == TOWN:
         # Town: Create, Update, Delete
-        if action in [CREATE, UPDATE, DELETE] and collection_id in [BEACONS, CONSUMERS, RETAILERS, RETAILER_USERS,
+        if action in [CREATE, UPDATE, DELETE, APPROVE] and collection_id in [BEACONS, CONSUMERS, RETAILERS, RETAILER_USERS,
                                                                     TOWN_USERS, PENDING_RETAILERS]:
             return
         elif action == READ:
             return
     elif user_type == DEV:
+        return
+    # Any user can create a Pending Retailer(in other words apply for retailer registration).
+    elif action == CREATE and collection_id == PENDING_RETAILERS:
         return
     # Fail-safe defaults: Base access decisions on permission rather than exclusion
     raise NoCollectionPermissionError(user_type, action, collection_id)

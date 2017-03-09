@@ -6,6 +6,7 @@ from FlaskWebProject.steershared.shared_consts import *
 from FlaskWebProject.steershared.dbconnectors.db_helpers import get_db
 import random
 from operator import itemgetter
+# Modified by C.Pigiotis
 
 
 def create(collection_id, headers, docs):
@@ -95,7 +96,7 @@ def create_products(collection_id, headers, products):
 
     # Classify the iab category
     classify_products_iab(headers, products)
-
+    products[0][IMAGE_URL] = uploadBlobImages(products) # update the image_url
     return create(collection_id, headers, products)
 
 
@@ -194,7 +195,7 @@ def update_retailer_users(collection_id, headers, docs):
         doc[SALT] = salt
         doc[HASHED_PASS] = hashed_pass
         del doc[PASSWORD]
-    return create(collection_id, headers, docs)
+    return update(collection_id, headers, docs)
 
 
 def update_retailers(collection_id, headers, retailers):
@@ -302,3 +303,83 @@ def read_bypass(collection_id, mode_):
     docs = get_db(mode_).read(collection_id)
     print docs
     return docs
+#################################################################################################
+
+
+# this function is used when a town admin request pending retailers data
+def town_read_pending_retailers(collection_id, headers, query_dicts):
+    if type(query_dicts) is dict:
+        query_dicts = [query_dicts]
+    check_collection_permission(collection_id, headers, READ)
+    # Enforce read safety means that there is no need to check doc permission
+    docs = get_db(headers).read(collection_id, None)
+    return docs
+
+
+# because CREATE is getting information for retailers(shop) and
+#  retailer users those two methods are used to distinguished the data to be
+# added to table retailers and retailer_users
+def get_ret_doc(docs):
+    print docs
+    ret_list = ['address', 'description', 'email', 'survey_image_url', 'latitude', 'logo_image_url', 'longitude',
+          'name',
+       'phone', 'postcode', 'website']
+    ret_doc = {}
+    # We take all attributes listed in ret_list and add them to a new list to return.
+    for attri in ret_list:
+        ret_doc[attri] = docs[attri]
+    print ret_doc
+    if type(ret_doc) is dict:
+        ret_doc = [ret_doc]
+    return ret_doc
+
+
+def get_ret_user_doc(docs):
+    ret_user_list = ['email', 'firstname', 'password', 'phone', 'surname', 'username']
+
+    ret_user_doc = {}
+    print ret_user_doc
+    # We take all attributes listed in ret_user_doc and add them to a new list to return.
+    for attri in ret_user_list:
+        ret_user_doc[attri] = docs[attri]
+    print ret_user_doc
+    if type(ret_user_doc) is dict:
+        ret_user_doc = [ret_user_doc]
+    return ret_user_doc
+
+# this function gets called from client_urls when a town admin approves the retailers that want to sign up
+def town_approve_pending_retailers(collection_id, headers, in_data):
+    print 'approving in progress'
+    # Expecting pending retailers id
+    print in_data
+    pending_ret_id = in_data[0]['id']
+    print pending_ret_id
+    # Retrieve doc from pending retailers
+    try:
+        pending_ret_doc = get_db(headers).read(PENDING_RETAILERS, {ID: pending_ret_id})[0]
+    except IndexError:
+        raise MissingDocsError(PENDING_RETAILERS,[])
+    ret_doc = get_ret_doc(pending_ret_doc)
+    ret_user_doc = get_ret_user_doc(pending_ret_doc)
+    # Create retailer in DB
+    ids = create(RETAILERS, headers, ret_doc)
+    # Create retailer admin in DB including the corresponding retailer_id
+    for id in ids:
+        ret_user_doc[0]['retailer_id'] = id
+    ret_user_doc[0]['is_admin'] = True
+    create_retailer_users(RETAILER_USERS, headers, ret_user_doc)
+    print 'before delete'
+    town_delete_pending_retailers(PENDING_RETAILERS, headers, pending_ret_id)
+    print 'deleted'
+    return pending_ret_doc
+
+
+# this function gets called from client_urls when a town admin dissaproves a pending retailer
+def town_delete_pending_retailers(collection_id, headers, delete_ids):
+    if type(delete_ids) is list:
+        delete_ids = delete_ids[0]['id']
+        print 'striping'
+    print delete_ids
+    check_collection_permission(collection_id, headers, DELETE)
+    # Check that user has permissions for docs with those ids
+    return get_db(headers).delete(collection_id, str(delete_ids))

@@ -4,7 +4,7 @@ import os
 import json
 from bson import json_util
 from bson.objectid import ObjectId
-
+import random
 def get_dir_name(db_access_module, mode):
     return '{0}_{1}'.format(db_access_module, mode)
 
@@ -24,6 +24,8 @@ def import_db(db_access_module, mode, path=os.getcwd()):
             for doc in docs:
                 doc[ID] = ObjectId(doc[ID])
                 doc[objectID] = doc[ID]
+                if (coll == PRODUCT_INTERACTIONS):
+                    doc["occurred_at"] = "2017-01-23T16:59:57"
                 del doc[ID]
         db.delete(coll)
         if(docs):
@@ -50,4 +52,4 @@ def export_db(db_access_module, mode, path=os.getcwd()):
 
 
 if __name__ == '__main__':
-    import_db('mongodb_connector', EVAL)
+    import_db('mongodb_connector', DEBUG)
