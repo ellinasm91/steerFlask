@@ -1,7 +1,9 @@
 adal==0.4.4
 appdirs==1.4.0
 aylien-apiclient==0.6.0
-azure==0.11.1
+azure==1.0.2
+azure-storage==0.30.0
+azure-mgmt-storage==0.31.0
 azure-common==1.1.4
 azure-mgmt==0.20.2
 azure-mgmt-common==0.20.0
@@ -9,11 +11,9 @@ azure-mgmt-compute==0.20.1
 azure-mgmt-network==0.20.1
 azure-mgmt-nspkg==1.0.0
 azure-mgmt-resource==0.20.1
-azure-mgmt-storage==0.20.0
 azure-nspkg==1.0.0
 azure-servicebus==0.20.1
 azure-servicemanagement-legacy==0.20.2
-azure-storage==0.34.0
 certifi==2017.1.23
 cffi==1.9.1
 click==6.7
