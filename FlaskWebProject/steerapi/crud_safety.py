@@ -347,6 +347,7 @@ def get_ret_user_doc(docs):
         ret_user_doc = [ret_user_doc]
     return ret_user_doc
 
+
 # this function gets called from client_urls when a town admin approves the retailers that want to sign up
 def town_approve_pending_retailers(collection_id, headers, in_data):
     print 'approving in progress'
@@ -382,4 +383,5 @@ def town_delete_pending_retailers(collection_id, headers, delete_ids):
     print delete_ids
     check_collection_permission(collection_id, headers, DELETE)
     # Check that user has permissions for docs with those ids
-    return get_db(headers).delete(collection_id, str(delete_ids))
+    found_ids = get_db(headers).delete(collection_id, str(delete_ids))
+    return get_id_docs(found_ids)
