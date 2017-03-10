@@ -366,12 +366,10 @@ def town_approve_pending_retailers(collection_id, headers, in_data):
     ids = create(RETAILERS, headers, ret_doc)
     # Create retailer admin in DB including the corresponding retailer_id
     for id in ids:
-        ret_user_doc[0]['retailer_id'] = id
+        ret_user_doc[0]['retailer_id'] = id["id"]
     ret_user_doc[0]['is_admin'] = True
     create_retailer_users(RETAILER_USERS, headers, ret_user_doc)
-    print 'before delete'
     town_delete_pending_retailers(PENDING_RETAILERS, headers, pending_ret_id)
-    print 'deleted'
     return pending_ret_doc
 
 
